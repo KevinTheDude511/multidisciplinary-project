@@ -1,4 +1,4 @@
-// const moment = require('moment-timezone');
+const moment = require('moment-timezone');
 
 function capitalized(word) {
     return word.charAt(0).toUpperCase() + word.slice(1)
@@ -7,22 +7,23 @@ function capitalized(word) {
 function generateDynamicController(collectionName) {
     let modelName = capitalized(collectionName) + "Model"
     const dynamicModel = require(`../models/${modelName}`)
-    // const currentDate = new Date()
-    // currentDate.setUTCHours(currentDate.getUTCHours() + 7)
+    const currentDate = new Date()
+    currentDate.setUTCHours(currentDate.getUTCHours() + 7)
     // const currentDate = moment().tz('Asia/Ho_Chi_Minh');
-    const utcDate = new Date();
+    // const utcDate = new Date();
     // Convert UTC date to UTC+7 (Vietnam Standard Time)
-    const offset = 7 * 60; // Offset in minutes (UTC+7 is 7 hours ahead of UTC)
-    const currentDate = new Date(utcDate.getTime() + (offset * 60000));
+    // const offset = 7 * 60; // Offset in minutes (UTC+7 is 7 hours ahead of UTC)
+    // const currentDate = new Date(utcDate.getTime() + (offset * 60000));
     const numberOfFakeData = 10000 // for creating fake data in 'test' collection
 
     return {
         async readAveragePerHourForHalfDay(req, res) {
             try {
-                // console.log(currentDate.toISOString());
+                console.log(currentDate.format());
                 const hourRange = 12
                 const startRange = new Date(currentDate)
-                startRange.setUTCHours(currentDate.getUTCHours() - hourRange)
+                startRange.setUTCHours(startRange.getUTCHours() - hourRange)
+                console.log(startRange.toISOString())
                 const step = 1
                 const avgDataList = [];
 
@@ -68,7 +69,7 @@ function generateDynamicController(collectionName) {
             try {
                 const dayRange = 7
                 const startRange = new Date(currentDate)
-                startRange.setUTCDate(currentDate.getUTCDate() - dayRange)
+                startRange.setUTCDate(startRange.getUTCDate() - dayRange)
                 const step = 1
                 const avgDataList = [];
                 // console
