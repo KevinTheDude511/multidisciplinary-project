@@ -19,7 +19,7 @@ function generateDynamicController(collectionName) {
     return {
         async readAveragePerHourForHalfDay(req, res) {
             try {
-                console.log(currentDate.format());
+                console.log(currentDate.toISOString());
                 const hourRange = 12
                 const startRange = new Date(currentDate)
                 startRange.setUTCHours(startRange.getUTCHours() - hourRange)
