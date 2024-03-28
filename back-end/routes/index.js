@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const dynamicController = require('../controllers/DynamicController')
+const activityController = require('../controllers/ActivityController')
 
 const collections = ['fan', 'humisensor', 'led', 'lightsensor', 'tempsensor', 'test']
 
@@ -13,6 +14,7 @@ collections.forEach((collection) => {
         .get(controller.readAveragePerDayForWeek)
 })
 
-// router.route(`/activity/onoff`) //
+router.route(`/onoff/activity/:limit`)
+    .get(activityController.readOnOff)
 
 module.exports = router
