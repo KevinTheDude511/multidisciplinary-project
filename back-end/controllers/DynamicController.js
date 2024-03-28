@@ -1,4 +1,4 @@
-const moment = require('moment-timezone');
+// const moment = require('moment-timezone');
 
 function capitalized(word) {
     return word.charAt(0).toUpperCase() + word.slice(1)
