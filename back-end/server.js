@@ -10,7 +10,7 @@ const index = require('./routes/index')
 
 const corsOptions = {
     origin: function (origin, callback) {
-        const allowedOrigins = ['http://localhost:5713', 'http://localhost:5174', 'http://localhost:5175'];
+        const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'];
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {

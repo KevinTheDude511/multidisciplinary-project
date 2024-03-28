@@ -13,4 +13,6 @@ collections.forEach((collection) => {
         .get(controller.readAveragePerDayForWeek)
 })
 
+// router.route(`/activity/onoff`)
+
 module.exports = router
