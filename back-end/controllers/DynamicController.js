@@ -47,8 +47,6 @@ function generateDynamicController(collectionName) {
                     }
                     avgDataList.push(averageValue);
                 }
-        
-                // console.log(avgDataList);
                 res.status(200).json({data: avgDataList})
             } catch (error) {
                 console.log(error)
@@ -94,8 +92,6 @@ function generateDynamicController(collectionName) {
                     }
                     avgDataList.push(averageValue);
                 }
-        
-                // console.log(avgDataList);
                 res.status(200).json({data: avgDataList})
             } catch (error) {
                 console.log(error)
