@@ -7,7 +7,7 @@ function generateDynamicController(collectionName) {
     const dynamicModel = require(`../models/${modelName}`)
     const currentDate = new Date()
     currentDate.setUTCHours(currentDate.getUTCHours() + 7)
-    const numberOfFakeData = 100 // for creating fake data in 'test' collection
+    const numberOfFakeData = 10000 // for creating fake data in 'test' collection
 
     return {
         async readAveragePerHourForHalfDay(req, res) {
@@ -28,8 +28,8 @@ function generateDynamicController(collectionName) {
                         {
                             $match: {
                                 created_at: {
-                                    $gte: start.toISOString(),
-                                    $lt: end.toISOString(),
+                                    $gte: start,
+                                    $lt: end,
                                 }
                             }
                         },
@@ -44,6 +44,7 @@ function generateDynamicController(collectionName) {
                     let averageValue = 0;
                     if (aggregateResult.length > 0) {
                         averageValue = aggregateResult[0].averageValue;
+                        averageValue = Math.round(averageValue * 100) / 100;
                     }
                     avgDataList.push(averageValue);
                 }
@@ -73,8 +74,8 @@ function generateDynamicController(collectionName) {
                         {
                             $match: {
                                 created_at: {
-                                    $gte: start.toISOString(),
-                                    $lt: end.toISOString(),
+                                    $gte: start,
+                                    $lt: end,
                                 }
                             }
                         },
@@ -89,6 +90,7 @@ function generateDynamicController(collectionName) {
                     let averageValue = 0;
                     if (aggregateResult.length > 0) {
                         averageValue = aggregateResult[0].averageValue;
+                        averageValue = Math.round(averageValue * 100) / 100;
                     }
                     avgDataList.push(averageValue);
                 }
@@ -117,7 +119,7 @@ function generateDynamicController(collectionName) {
                     const feed_key = 'smarthome.fan'
                     const value = Math.floor(Math.random() * 101)
                     let created_at = new Date(startTimeValue + Math.random() * (endTimeValue - startTimeValue))
-                    created_at = created_at.toISOString()
+                    // created_at = created_at.toISOString()
                     fakeData.push({
                         id,
                         value,

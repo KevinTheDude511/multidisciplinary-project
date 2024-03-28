@@ -5,7 +5,7 @@ const TempsensorSchema = new mongoose.Schema({
     value: Number,
     feed_id: Number,
     feed_key: String,
-    created_at: String,
+    created_at: Date,
 })
 
 module.exports = mongoose.model('Tempsensor', TempsensorSchema, 'tempsensor')
