@@ -11,11 +11,9 @@ function generateDynamicController(collectionName) {
             try {
                 const currentDate = new Date()
                 currentDate.setUTCHours(currentDate.getUTCHours() + 7)
-                // console.log(currentDate.toISOString());
                 const hourRange = 12
                 const startRange = new Date(currentDate)
                 startRange.setUTCHours(startRange.getUTCHours() - hourRange)
-                // console.log(startRange.toISOString())
                 const step = 1
                 const avgDataList = [];
 
@@ -66,7 +64,6 @@ function generateDynamicController(collectionName) {
                 startRange.setUTCDate(startRange.getUTCDate() - dayRange)
                 const step = 1
                 const avgDataList = [];
-                // console
                 for (let i = 0; i < dayRange; i++) {
                     const start = new Date(startRange);
                     start.setUTCDate(start.getUTCDate() + i)
@@ -123,7 +120,6 @@ function generateDynamicController(collectionName) {
                     const feed_key = 'smarthome.fan'
                     const value = Math.floor(Math.random() * 101)
                     let created_at = new Date(startTimeValue + Math.random() * (endTimeValue - startTimeValue))
-                    // created_at = created_at.toISOString()
                     fakeData.push({
                         id,
                         value,
