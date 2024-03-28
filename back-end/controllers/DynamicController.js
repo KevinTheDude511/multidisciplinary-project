@@ -1,5 +1,3 @@
-// const moment = require('moment-timezone');
-
 function capitalized(word) {
     return word.charAt(0).toUpperCase() + word.slice(1)
 }
@@ -7,23 +5,17 @@ function capitalized(word) {
 function generateDynamicController(collectionName) {
     let modelName = capitalized(collectionName) + "Model"
     const dynamicModel = require(`../models/${modelName}`)
-    const currentDate = new Date()
-    currentDate.setUTCHours(currentDate.getUTCHours() + 7)
-    // const currentDate = moment().tz('Asia/Ho_Chi_Minh');
-    // const utcDate = new Date();
-    // Convert UTC date to UTC+7 (Vietnam Standard Time)
-    // const offset = 7 * 60; // Offset in minutes (UTC+7 is 7 hours ahead of UTC)
-    // const currentDate = new Date(utcDate.getTime() + (offset * 60000));
-    const numberOfFakeData = 10000 // for creating fake data in 'test' collection
 
     return {
         async readAveragePerHourForHalfDay(req, res) {
             try {
-                console.log(currentDate.toISOString());
+                const currentDate = new Date()
+                currentDate.setUTCHours(currentDate.getUTCHours() + 7)
+                // console.log(currentDate.toISOString());
                 const hourRange = 12
                 const startRange = new Date(currentDate)
                 startRange.setUTCHours(startRange.getUTCHours() - hourRange)
-                console.log(startRange.toISOString())
+                // console.log(startRange.toISOString())
                 const step = 1
                 const avgDataList = [];
 
@@ -67,6 +59,8 @@ function generateDynamicController(collectionName) {
         },
         async readAveragePerDayForWeek(req, res) {
             try {
+                const currentDate = new Date()
+                currentDate.setUTCHours(currentDate.getUTCHours() + 7)
                 const dayRange = 7
                 const startRange = new Date(currentDate)
                 startRange.setUTCDate(startRange.getUTCDate() - dayRange)
@@ -119,9 +113,10 @@ function generateDynamicController(collectionName) {
                 startTime.setUTCDate(startTime.getUTCDate() - 7)
                 const endTime = new Date(currentDate)
 
-                startTimeValue = startTime.getTime()
-                endTimeValue = endTime.getTime()
+                const startTimeValue = startTime.getTime()
+                const endTimeValue = endTime.getTime()
                 const fakeData = [];
+                const numberOfFakeData = 10000
                 for (let i = 0; i < numberOfFakeData; i++) {
                     const id = '0FJ2E8399ERHJH53JBXE51P2FC'
                     const feed_id = 2768221
