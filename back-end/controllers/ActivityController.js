@@ -4,7 +4,13 @@ const readOnOff = async (req, res) => {
     try {
         const {limit} = req.params
         const onOffActivities = await Activity.find({
-            value: {$in: ["ON", "OFF"]}
+            $or: [
+                {
+                    feed_id: "smarthome.led",
+                    value: {$in: ["ON", "OFF"]}
+                },
+                {feed_id: "smarthome.fan"}
+            ]
         })
             .sort({created_at: -1})
             .limit(parseInt(limit));
