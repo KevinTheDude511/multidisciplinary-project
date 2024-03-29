@@ -1,5 +1,4 @@
 const moment = require('moment')
-moment().utcOffset('+07:00');
 const Activity = require(`../models/ActivityModel`)
 
 const readOnOff = async (req, res) => {
@@ -9,6 +8,7 @@ const readOnOff = async (req, res) => {
             .sort({created_at: -1})
             .limit(parseInt(limit));
 
+        moment().utcOffset('+07:00')
         const formattedActivities = onOffActivities.map(activity => ({
             ...activity.toObject(),
             created_at: moment(activity.created_at).format('YYYY-MM-DD HH:mm:ss')
