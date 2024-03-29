@@ -3,7 +3,7 @@ const router = express.Router()
 const dynamicController = require('../controllers/DynamicController')
 const activityController = require('../controllers/ActivityController')
 
-const collections = ['fan', 'humisensor', 'led', 'lightsensor', 'tempsensor', 'test']
+const collections = ['humisensor', 'lightsensor', 'tempsensor', 'test']
 
 collections.forEach((collection) => {
     controller = dynamicController(collection)
