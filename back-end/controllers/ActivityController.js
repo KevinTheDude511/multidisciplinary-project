@@ -11,17 +11,23 @@ const removePrefix = (activities) => {
 
 const readOnOff = async (req, res) => {
     try {
-        const {limit} = req.params
-        const onOffActivities = await Activity.find({})
-            .sort({created_at: -1})
-            .limit(parseInt(limit));
+        let {limit} = req.params
+        limit = limit ? parseInt(limit) : null
 
-        moment().utcOffset('+07:00')
-        const formattedActivities = onOffActivities.map(activity => ({
+        let query = Activity.find({}).sort({created_at: -1})
+        if (limit !== null)
+        {
+            query = query.limit(limit)
+        }
+
+        let allActivities = await query
+
+        allActivities = allActivities.map(activity => ({
             ...activity.toObject(),
             created_at: moment(activity.created_at).format('YYYY-MM-DD HH:mm:ss')
         }));
 
+        const formattedActivities = removePrefix(allActivities)
         res.status(200).json({data: formattedActivities})
     } catch (error) {
         console.log(error)
@@ -29,16 +35,6 @@ const readOnOff = async (req, res) => {
     }
 }
 
-// find with conditions
-// $or: [
-//     {
-//         feed_id: "smarthome.led",
-//         value: {$in: ["ON", "OFF"]}
-//     },
-//     {feed_id: "smarthome.fan"}
-// ]
-
 module.exports = {
     readOnOff,
-    readAll,
 }

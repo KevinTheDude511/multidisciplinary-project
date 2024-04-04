@@ -13,9 +13,8 @@ collections.forEach((collection) => {
     router.route(`/week/${collection}`)
         .get(controller.readAveragePerDayForWeek)
 })
-router.route(`/onoff/activity`)
-    .get(activityController.readAll)
-router.route(`/onoff/activity/:limit`)
+
+router.route(`/onoff/activity/:limit?`)
     .get(activityController.readOnOff)
 
 module.exports = router
