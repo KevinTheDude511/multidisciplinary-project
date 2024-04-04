@@ -3,7 +3,7 @@ const router = express.Router()
 const controllerFactory = require('../controllers/ControllerFactory')
 const activityController = require('../controllers/ActivityController')
 
-const collections = ['fan', 'humisensor', 'led', 'lightsensor', 'tempsensor', 'test']
+const collections = ['humisensor', 'lightsensor', 'tempsensor', 'test']
 
 collections.forEach((collection) => {
     const controller = controllerFactory(collection)
