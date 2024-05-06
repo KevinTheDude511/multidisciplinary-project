@@ -1,17 +1,25 @@
 const express = require('express')
 const router = express.Router()
-const controllerFactory = require('../controllers/ControllerFactory')
+const {HumiSensorFactory, LightSensorFactory, TempSensorFactory} = require('../controllers/SensorControllerFactory')
 const activityController = require('../controllers/ActivityController')
 
-const collections = ['humisensor', 'lightsensor', 'tempsensor', 'test']
+const humiSensorFactory = new HumiSensorFactory()
+const humiSensorController = humiSensorFactory.createController()
 
-collections.forEach((collection) => {
-    const controller = controllerFactory(collection)
-    router.route(`/halfday/${collection}`)
-        .get(controller.readAveragePerHourForHalfDay)
-        .post(controller.createData)
-    router.route(`/week/${collection}`)
-        .get(controller.readAveragePerDayForWeek)
+const lightSensorFactory = new LightSensorFactory()
+const lightSensorController = lightSensorFactory.createController()
+
+const tempSensorFactory = new TempSensorFactory()
+const tempSensorController = tempSensorFactory.createController()
+
+const controllers = [humiSensorController, lightSensorController, tempSensorController]
+
+controllers.forEach((controller) => {
+    router.route(`/halfday/${controller.name}`)
+        .get(controller.readAveragePerHourForHalfDay.bind(controller))
+        .post(controller.createData.bind(controller))
+    router.route(`/week/${controller.name}`)
+        .get(controller.readAveragePerDayForWeek.bind(controller))
 })
 
 router.route(`/onoff/activity/:limit?`)

@@ -1,0 +1,191 @@
+function capitalized(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1)
+}
+
+class Controller {
+    constructor(name)
+    {
+        this.name = name
+        this.dynamicModel = require(`../models/${capitalized(name) + "Model"}`)
+    }
+    async readAveragePerHourForHalfDay(req, res) {
+        try {
+            const currentDate = new Date()
+            currentDate.setUTCHours(currentDate.getUTCHours() + 7)
+            const hourRange = 12
+            const startRange = new Date(currentDate)
+            startRange.setUTCHours(startRange.getUTCHours() - hourRange)
+            const step = 1
+            const avgDataList = [];
+
+            for (let i = 0; i < hourRange; i++) {
+                const start = new Date(startRange);
+                start.setUTCHours(start.getUTCHours() + i)
+                const end = new Date(startRange);
+                end.setUTCHours(end.getUTCHours() + i + step)
+                
+                const aggregateResult = await this.dynamicModel.aggregate([
+                    {
+                        $match: {
+                            created_at: {
+                                $gte: start,
+                                $lt: end,
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            averageValue: { $avg: "$value" }
+                        }
+                    }
+                ]);
+
+                let averageValue = 0;
+                if (aggregateResult.length > 0) {
+                    averageValue = aggregateResult[0].averageValue;
+                    averageValue = Math.round(averageValue * 100) / 100;
+                }
+                avgDataList.push(averageValue);
+            }
+            res.status(200).json({data: avgDataList})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({msg: error})
+        }
+    }
+    async readAveragePerDayForWeek(req, res) {
+        try {
+            const currentDate = new Date()
+            currentDate.setUTCHours(currentDate.getUTCHours() + 7)
+            const dayRange = 7
+            const startRange = new Date(currentDate)
+            startRange.setUTCDate(startRange.getUTCDate() - dayRange)
+            const step = 1
+            const avgDataList = [];
+            for (let i = 0; i < dayRange; i++) {
+                const start = new Date(startRange);
+                start.setUTCDate(start.getUTCDate() + i)
+                const end = new Date(startRange);
+                end.setUTCDate(end.getUTCDate() + i + step)
+                
+                const aggregateResult = await this.dynamicModel.aggregate([
+                    {
+                        $match: {
+                            created_at: {
+                                $gte: start,
+                                $lt: end,
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: null,
+                            averageValue: { $avg: "$value" }
+                        }
+                    }
+                ]);
+
+                let averageValue = 0;
+                if (aggregateResult.length > 0) {
+                    averageValue = aggregateResult[0].averageValue;
+                    averageValue = Math.round(averageValue * 100) / 100;
+                }
+                avgDataList.push(averageValue);
+            }
+            res.status(200).json({data: avgDataList})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({msg: error})
+        }
+    }
+    async createData(req, res) {
+        try {
+            const currentDate = new Date()
+            currentDate.setUTCHours(currentDate.getUTCHours() + 7)
+            const startTime = new Date(currentDate)
+            startTime.setUTCDate(startTime.getUTCDate() - 7)
+            const endTime = new Date(currentDate)
+
+            const startTimeValue = startTime.getTime()
+            const endTimeValue = endTime.getTime()
+            const fakeData = [];
+            const numberOfFakeData = 10000
+            for (let i = 0; i < numberOfFakeData; i++) {
+                const id = '0FJ2E8399ERHJH53JBXE51P2FC'
+                const feed_id = 2768221
+                const feed_key = 'smarthome.fan'
+                const value = Math.floor(Math.random() * 101)
+                let created_at = new Date(startTimeValue + Math.random() * (endTimeValue - startTimeValue))
+                fakeData.push({
+                    id,
+                    value,
+                    feed_id,
+                    feed_key,
+                    created_at,
+                })
+            }
+
+            await this.dynamicModel.insertMany(fakeData)
+            res.status(201).json({ msg: 'Fake data created successfully' })
+        } catch (error) {
+            res.status(500).json({msg: error})
+        }
+    }
+}
+
+class HumiSensorController extends Controller {
+    constructor(name)
+    {
+        super(name)
+    }
+}
+
+class LightSensorController extends Controller {
+    constructor(name)
+    {
+        super(name)
+    }
+}
+
+class TempSensorController extends Controller {
+    constructor(name)
+    {
+        super(name)
+    }
+}
+
+class Factory {
+    createController() {
+        return new Controller('test')
+    }
+}
+
+class HumiSensorFactory extends Factory {
+    createController() {
+        return new HumiSensorController('humisensor')
+    }
+}
+
+class LightSensorFactory extends Factory {
+    createController() {
+        return new LightSensorController('lightsensor')
+    }
+}
+
+class TempSensorFactory extends Factory {
+    createController() {
+        return new TempSensorController('tempsensor')
+    }
+}
+
+module.exports = {
+    Controller,
+    HumiSensorController,
+    LightSensorController,
+    TempSensorController,
+    Factory,
+    HumiSensorFactory,
+    LightSensorFactory,
+    TempSensorFactory
+};
